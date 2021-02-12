@@ -1,14 +1,10 @@
-package com.example.socialapp.data;
+package com.example.socialapp.data
 
-import com.example.socialapp.models.Bleep;
-import com.example.socialapp.models.User;
+import com.example.socialapp.models.Bleep
+import com.example.socialapp.models.User
 
-import java.util.List;
-
-public class AppData {
-
-    public static List<User> userList;
-    public static List<String> chatKeyList;
-    public static List<Bleep> bleepList;
-
+object AppData {
+    var userList: List<User>? = null
+    var chatKeyList: List<String>? = null
+    var bleepList: List<Bleep>? = null
 }

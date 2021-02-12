@@ -1,80 +1,69 @@
-package com.example.socialapp.auth;
+package com.example.socialapp.auth
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.socialapp.BleepsActivity
+import com.example.socialapp.R
+import com.example.socialapp.auth.LoginActivity.Companion.isUserRegistered
+import com.example.socialapp.databinding.ActivityRegisterBinding
+import com.example.socialapp.models.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.mikhaellopez.circularimageview.CircularImageView
 
-import androidx.appcompat.app.AppCompatActivity;
+class RegisterActivity : AppCompatActivity() {
 
-import com.example.socialapp.BleepsActivity;
-import com.example.socialapp.R;
-import com.example.socialapp.models.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.mikhaellopez.circularimageview.CircularImageView;
+    private lateinit var binding: ActivityRegisterBinding
 
-public class RegisterActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (LoginActivity.isUserRegistered()) {
-            startActivity(new Intent(this, BleepsActivity.class));
-            finish();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (isUserRegistered) {
+            startActivity(Intent(this, BleepsActivity::class.java))
+            finish()
         }
-        setContentView(R.layout.activity_register);
-
-        setup();
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setup()
     }
 
     @SuppressLint("CheckResult")
-    public void setup() {
-        TextView registerEmailTextView = findViewById(R.id.registerEmailTextView);
-        TextView registerNameTextView = findViewById(R.id.registerNameTextView);
-        TextView registerNickTextView = findViewById(R.id.registerNickTextView);
-        Button registerButton = findViewById(R.id.registerFinalButton);
-        CircularImageView registerImageView = findViewById(R.id.registerImageView);
+    fun setup() {
+        val registerEmailTextView = binding.registerEmailTextView
+        val registerNameTextView = binding.registerNameTextView
+        val registerNickTextView = binding.registerNickTextView
+        val registerButton = binding.registerFinalButton
+        val registerImageView = binding.registerImageView
+        val user = FirebaseAuth.getInstance().currentUser
+        registerEmailTextView.setText(user?.email)
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            registerEmailTextView.setText(user.getEmail());
-        }
-
-        registerImageView.setOnClickListener(v -> {
-            startActivityForResult(Intent.createChooser(new Intent()
-                    .setType("image/*")
-                    .setAction(Intent.ACTION_GET_CONTENT)),
-            );
-        });
-
-        registerButton.setOnClickListener(v -> {
-            if (registerEmailTextView.getText() != ""
-                    && registerNameTextView.getText() != ""
-                    && registerNickTextView.getText() != "") {
-
-                DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference("users");
-                usersReference.child(user.getUid()).setValue(new User(user.getUid(),
-                        registerNameTextView.getText().toString(),
-                        registerNickTextView.getText().toString(),
-                        "a")
-                );
-                nextActivity();
+        registerButton.setOnClickListener {
+            if (!registerEmailTextView.text.equals("")
+                    && registerNameTextView.text.equals("")
+                    && registerNickTextView.text.equals("")) {
+                val usersReference = FirebaseDatabase.getInstance().getReference("users")
+                usersReference.child(user!!.uid).setValue(User(user.uid,
+                        registerNameTextView.text.toString(),
+                        registerNickTextView.text.toString(),
+                        "a"
+                ))
+                nextActivity()
             } else {
                 Toast.makeText(this,
                         "Todos los campos son obligatorios",
                         Toast.LENGTH_SHORT
-                ).show();
+                ).show()
             }
-        });
+        }
     }
 
-    private void nextActivity() {
-        startActivity(new Intent(this, BleepsActivity.class));
-        finish();
+    private fun nextActivity() {
+        startActivity(Intent(this, BleepsActivity::class.java))
+        finish()
     }
 }

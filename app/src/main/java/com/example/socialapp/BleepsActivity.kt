@@ -63,11 +63,11 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
         val mAdapter = BleepsAdapter(AppData.bleepList, this, this)
         recyclerView.adapter = mAdapter
         if (AppData.bleepList.isNotEmpty()) {
-            findViewById<View>(R.id.noBleepsTextView).visibility = View.INVISIBLE
+            binding.noBleepsTextView.visibility = View.INVISIBLE
         }
-        val newBleepButton = findViewById<FloatingActionButton>(R.id.newBleepButton)
-        newBleepButton.setOnClickListener { v: View? -> startActivity(Intent(this, NewBleepActivity::class.java)) }
-        setSupportActionBar(findViewById(R.id.bleeps_toolbar))
+        val newBleepButton = binding.newBleepButton
+        newBleepButton.setOnClickListener { startActivity(Intent(this, NewBleepActivity::class.java)) }
+        setSupportActionBar(binding.bleepsToolbar)
     }
 
     private fun loadBleeps() {
@@ -94,9 +94,9 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
         recyclerView.adapter!!.notifyDataSetChanged()
         recyclerView.invalidate()
         if (AppData.bleepList.isNotEmpty()) {
-            findViewById<View>(R.id.noBleepsTextView).visibility = View.INVISIBLE
+            binding.noBleepsTextView.visibility = View.INVISIBLE
         } else {
-            findViewById<View>(R.id.noBleepsTextView).visibility = View.VISIBLE
+            binding.noBleepsTextView.visibility = View.VISIBLE
         }
     }
 

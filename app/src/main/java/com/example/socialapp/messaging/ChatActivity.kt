@@ -1,88 +1,81 @@
-package com.example.socialapp.messaging;
+package com.example.socialapp.messaging
 
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.socialapp.R
+import com.example.socialapp.databinding.ActivityChatBinding
+import com.example.socialapp.models.Message
+import com.example.socialapp.readapters.MessageAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import java.util.*
+import java.util.function.Consumer
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class ChatActivity : AppCompatActivity() {
+    private var chatKey: String? = null
+    private var otherUserNick: String? = null
+    private lateinit var recyclerView: RecyclerView
+    var messageList: MutableList<Message> = ArrayList()
+    private var chatReference: DatabaseReference? = null
+    private lateinit var binding: ActivityChatBinding
 
-import com.example.socialapp.R;
-import com.example.socialapp.models.Message;
-import com.example.socialapp.readapters.MessageAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class ChatActivity extends AppCompatActivity {
-    private final static String TAG = "ChatActivity";
-    String chatKey, otherUserNick;
-    RecyclerView recyclerView;
-    List<Message> messageList = new ArrayList<>();
-    DatabaseReference chatReference;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        chatKey = getIntent().getStringExtra("chatKey");
-        otherUserNick = getIntent().getStringExtra("otherUserNick");
-        loadMessages();
-        setContentView(R.layout.activity_chat);
-        setup();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityChatBinding.inflate(layoutInflater)
+        chatKey = intent.getStringExtra("chatKey")
+        otherUserNick = intent.getStringExtra("otherUserNick")
+        loadMessages()
+        setContentView(binding.root)
+        setup()
     }
 
-    public void setup() {
-        recyclerView = findViewById(R.id.chatRecyclerView);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        MessageAdapter mAdapter = new MessageAdapter(messageList);
-        recyclerView.setAdapter(mAdapter);
+    private fun setup() {
+        recyclerView = binding.chatRecyclerView
+        recyclerView.setHasFixedSize(true)
+        val layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = MessageAdapter(messageList)
 
-        Button sendButton = findViewById(R.id.sendButton);
-        sendButton.setOnClickListener(v -> {
-            TextView messageTextView = findViewById(R.id.messageTextView);
-            if (!messageTextView.getText().toString().isEmpty()) {
-                chatReference.child(System.currentTimeMillis() + "-" + FirebaseAuth.getInstance().getUid())
-                        .setValue(messageTextView.getText().toString());
-                messageTextView.setText("");
+        val sendButton = binding.sendButton
+        sendButton.setOnClickListener {
+            val messageTextView = binding.messageTextView
+            if (messageTextView.text.toString().isNotEmpty()) {
+                chatReference!!.child(System.currentTimeMillis().toString() + "-" + FirebaseAuth.getInstance().uid)
+                        .setValue(messageTextView.text.toString())
+                messageTextView.setText("")
             }
-        });
-
-        Toolbar toolbar = findViewById(R.id.chat_toolbar);
-        toolbar.setTitle(otherUserNick);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        }
+        val toolbar = findViewById<Toolbar>(R.id.chat_toolbar)
+        toolbar.title = otherUserNick
+        toolbar.setNavigationOnClickListener { finish() }
     }
 
-    public void loadMessages() {
-        chatReference = FirebaseDatabase.getInstance().getReference("chats/" + chatKey);
-        chatReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                messageList.clear();
-                ArrayList<Message> messages = new ArrayList<>();
-                snapshot.getChildren().forEach(child -> {
-                    messages.add(new Message(child.getKey(), child.getValue(String.class)));
-                });
-                messageList.addAll(messages);
-                recyclerView.getAdapter().notifyDataSetChanged();
-                recyclerView.invalidate();
+    private fun loadMessages() {
+        chatReference = FirebaseDatabase.getInstance().getReference("chats/$chatKey")
+        chatReference!!.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                messageList.clear()
+                val messages = ArrayList<Message>()
+                snapshot.children.forEach(Consumer { child: DataSnapshot -> messages.add(Message(child.key!!, child.getValue(String::class.java)!!)) })
+                messageList.addAll(messages)
+                recyclerView.adapter!!.notifyDataSetChanged()
+                recyclerView.invalidate()
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "Failed to read value.", error.toException());
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
-        });
+        })
+    }
+
+    companion object {
+        private const val TAG = "ChatActivity"
     }
 }

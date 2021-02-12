@@ -43,16 +43,16 @@ class NewBleepActivity : AppCompatActivity() {
     private fun setup() {
         val toolbar = binding.newBleepToolbar
         setSupportActionBar(toolbar)
-        toolbar.setNavigationOnClickListener { v: View? -> finish() }
-        val bleepContentView = findViewById<TextView>(R.id.editTextBleepContent)
-        bleepContentView.setOnEditorActionListener { v: TextView?, actionId: Int, event: KeyEvent? ->
+        toolbar.setNavigationOnClickListener { finish() }
+        val bleepContentView = binding.editTextBleepContent
+        bleepContentView.setOnEditorActionListener { _: TextView?, _: Int, _: KeyEvent? ->
             toolbar.findViewById<View>(R.id.send_bleep_option).isEnabled = !bleepContentView.text.toString().isEmpty()
             false
         }
     }
 
     private fun newBleepPress() {
-        val bleepContentView = findViewById<TextView>(R.id.editTextBleepContent)
+        val bleepContentView = binding.editTextBleepContent
         var bleepOkay = true
         if (bleepContentView.text.toString().isEmpty()) {
             Toast.makeText(

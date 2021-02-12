@@ -1,77 +1,54 @@
-package com.example.socialapp.readapters;
+package com.example.socialapp.readapters
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.example.socialapp.R
+import com.example.socialapp.models.Message
+import com.example.socialapp.readapters.MessageAdapter.MessageViewHolder
+import com.google.firebase.auth.FirebaseAuth
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.socialapp.R;
-import com.example.socialapp.models.Message;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.List;
-
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
-
-    private final List<Message> messageList;
-
-    public MessageAdapter(List<Message> messageList) {
-        this.messageList = messageList;
+class MessageAdapter(private val messageList: List<Message>) : RecyclerView.Adapter<MessageViewHolder>() {
+    override fun getItemViewType(position: Int): Int {
+        return if (messageList[position].sender == FirebaseAuth.getInstance().uid) {
+            0
+        } else 1
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (messageList.get(position).sender.equals(FirebaseAuth.getInstance().getUid())) {
-            return 0;
-        }
-        return 1;
-    }
-
-    @NonNull
-    @Override
-    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v;
-
-        if (viewType == 0) {
-            v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.message_sent_row, parent, false);
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
+        val v: View = if (viewType == 0) {
+            LayoutInflater.from(parent.context)
+                    .inflate(R.layout.message_sent_row, parent, false)
         } else {
-            v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.message_received_row, parent, false);
+            LayoutInflater.from(parent.context)
+                    .inflate(R.layout.message_received_row, parent, false)
         }
-
-        return new MessageViewHolder(v, viewType);
+        return MessageViewHolder(v, viewType)
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
-        holder.contentTextView.setText(messageList.get(position).content);
-        holder.timeTextView.setText(Message.timeStringFromMillis(messageList.get(position).timeMillis));
+    override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
+        holder.contentTextView!!.text = messageList[position].content
+        holder.timeTextView!!.text = Message.timeStringFromMillis(messageList[position].timeMillis)
     }
 
-    @Override
-    public int getItemCount() {
-        return messageList.size();
+    override fun getItemCount(): Int {
+        return messageList.size
     }
 
-    public static class MessageViewHolder extends RecyclerView.ViewHolder {
+    class MessageViewHolder(itemView: View, viewType: Int) : RecyclerView.ViewHolder(itemView) {
+        var contentTextView: TextView? = null
+        var timeTextView: TextView? = null
 
-        TextView contentTextView;
-        TextView timeTextView;
-
-        public MessageViewHolder(@NonNull View itemView, int viewType) {
-            super(itemView);
+        init {
             if (viewType == 0) {
-                contentTextView = itemView.findViewById(R.id.sentMessageTextView);
-                timeTextView = itemView.findViewById(R.id.sentMessageTime);
+                contentTextView = itemView.findViewById(R.id.sentMessageTextView)
+                timeTextView = itemView.findViewById(R.id.sentMessageTime)
             } else {
-                contentTextView = itemView.findViewById(R.id.receivedMessageTextView);
-                timeTextView = itemView.findViewById(R.id.receivedMessageTime);
+                contentTextView = itemView.findViewById(R.id.receivedMessageTextView)
+                timeTextView = itemView.findViewById(R.id.receivedMessageTime)
             }
         }
     }
-
 }

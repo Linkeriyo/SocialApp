@@ -1,107 +1,100 @@
-package com.example.socialapp.messaging;
+package com.example.socialapp.messaging
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.socialapp.R
+import com.example.socialapp.data.AppData
+import com.example.socialapp.databinding.ActivityContactsBinding
+import com.example.socialapp.messaging.ChatActivity
+import com.example.socialapp.models.User
+import com.example.socialapp.readapters.ContactsAdapter
+import com.example.socialapp.readapters.ContactsAdapter.OnChatClickListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.util.*
+import java.util.function.Consumer
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class ContactsActivity : AppCompatActivity(), OnChatClickListener {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var binding: ActivityContactsBinding
 
-import com.example.socialapp.R;
-import com.example.socialapp.models.User;
-import com.example.socialapp.readapters.ContactsAdapter;
-import com.example.socialapp.data.AppData;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-
-public class ContactsActivity extends AppCompatActivity implements ContactsAdapter.OnChatClickListener {
-
-    private static final String TAG = "ContactsActivity";
-    RecyclerView recyclerView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        loadData();
-        setContentView(R.layout.activity_contacts);
-        setup();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityContactsBinding.inflate(layoutInflater)
+        loadData()
+        setContentView(binding.root)
+        setup()
     }
 
-    private void loadData() {
-        DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference("users");
-        usersReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                AppData.userList.clear();
-                ArrayList<User> users = new ArrayList<>();
-                snapshot.getChildren().forEach(child -> {
-                    users.add(child.getValue(User.class));
-                });
-                AppData.userList.addAll(users);
-                updateRecyclerView();
+    private fun loadData() {
+        val usersReference = FirebaseDatabase.getInstance().getReference("users")
+        usersReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                AppData.userList.clear()
+                val users = ArrayList<User?>()
+                snapshot.children.forEach(Consumer { child: DataSnapshot -> users.add(child.getValue(User::class.java)) })
+                AppData.userList.addAll(users)
+                updateRecyclerView()
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "Failed to read value.", error.toException());
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
-        });
+        })
     }
 
-    private void setup() {
-        recyclerView = findViewById(R.id.contactRecyclerView);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        ContactsAdapter mAdapter = new ContactsAdapter(AppData.userList, this, this);
-        recyclerView.setAdapter(mAdapter);
-        if (!AppData.userList.isEmpty()) {
-            findViewById(R.id.noContactsTextView).setVisibility(View.INVISIBLE);
+    private fun setup() {
+        recyclerView = findViewById(R.id.contactRecyclerView)
+        recyclerView.setHasFixedSize(true)
+        val layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+        val mAdapter = ContactsAdapter(AppData.userList, this, this)
+        recyclerView.adapter = mAdapter
+        if (AppData.userList.isNotEmpty()) {
+            findViewById<View>(R.id.noContactsTextView).visibility = View.INVISIBLE
         }
-
-        Toolbar toolbar = findViewById(R.id.toolbar_contacts);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_contacts)
+        toolbar.setNavigationOnClickListener { v: View? -> finish() }
     }
 
-    @Override
-    public void onChatClick(int position) {
-        User otherUser = AppData.userList.get(position);
-
-        Log.d(TAG, otherUser.userId);
-        String chatKey = null;
-        for (String key : AppData.chatKeyList) {
-            if (key.contains(otherUser.userId) && key.contains(FirebaseAuth.getInstance().getUid())) {
-                chatKey = key;
+    override fun onChatClick(position: Int) {
+        val otherUser = AppData.userList[position]
+        Log.d(TAG, otherUser.userId!!)
+        var chatKey: String? = null
+        for (key in AppData.chatKeyList) {
+            if (key.contains(otherUser.userId!!) && key.contains(FirebaseAuth.getInstance().uid!!)) {
+                chatKey = key
             }
         }
-
         if (chatKey == null) {
-            chatKey = FirebaseAuth.getInstance().getUid() + "-" + otherUser.userId;
+            chatKey = FirebaseAuth.getInstance().uid + "-" + otherUser.userId
         }
-
-        startActivity(new Intent(this, ChatActivity.class)
+        startActivity(Intent(this, ChatActivity::class.java)
                 .putExtra("chatKey", chatKey)
-                .putExtra("otherUserNick", otherUser.getNick())
-        );
+                .putExtra("otherUserNick", otherUser.nick)
+        )
     }
 
-    public void updateRecyclerView() {
-        recyclerView.getAdapter().notifyDataSetChanged();
-        recyclerView.invalidate();
-        if (!AppData.userList.isEmpty()) {
-            findViewById(R.id.noContactsTextView).setVisibility(View.INVISIBLE);
+    fun updateRecyclerView() {
+        recyclerView.adapter!!.notifyDataSetChanged()
+        recyclerView.invalidate()
+        if (AppData.userList.isNotEmpty()) {
+            findViewById<View>(R.id.noContactsTextView).visibility = View.INVISIBLE
         } else {
-            findViewById(R.id.noContactsTextView).setVisibility(View.VISIBLE);
+            findViewById<View>(R.id.noContactsTextView).visibility = View.VISIBLE
         }
+    }
+
+    companion object {
+        private const val TAG = "ContactsActivity"
     }
 }
