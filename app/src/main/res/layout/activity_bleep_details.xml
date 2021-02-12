@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BleepDetailsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider8">
+
+        <TextView
+            android:id="@+id/bleepDetailsTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" • time"
+            android:textSize="25sp"
+            app:layout_constraintStart_toEndOf="@+id/bleepDetailsNick"
+            app:layout_constraintTop_toTopOf="@+id/bleepDetailsNick" />
+
+        <TextView
+            android:id="@+id/bleepDetailsContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="content"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bleepDetailsNick"
+            app:layout_constraintTop_toBottomOf="@+id/bleepDetailsNick" />
+
+        <TextView
+            android:id="@+id/bleepDetailsNick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="nick"
+            android:textSize="25sp"
+            app:layout_constraintStart_toEndOf="@+id/bleepDetailsPic"
+            app:layout_constraintTop_toTopOf="@+id/bleepDetailsPic" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/bleepDetailsPic"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background"
+            app:civ_border_color="#000000"
+            app:civ_border_width="0dp"
+            app:civ_shadow="false"
+            app:civ_shadow_color="#3f51b5"
+            app:civ_shadow_radius="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/bleepDetailsToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackground"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title="Bleep" />
+
+
+    <View
+        android:id="@+id/divider8"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bleepDetailsToolbar" />
+</androidx.constraintlayout.widget.ConstraintLayout>
