@@ -38,7 +38,7 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 AppData.userList.clear()
                 val users = mutableListOf<User>()
-                snapshot.children.forEach(Consumer { child: DataSnapshot -> users.add(child.value as User) })
+                snapshot.children.forEach(Consumer { child: DataSnapshot -> child.getValue(User::class.java)?.let { users.add(it) } })
                 AppData.userList.addAll(users)
                 updateRecyclerView()
             }

@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MessageAdapter(private val messageList: List<Message>) : RecyclerView.Adapter<MessageViewHolder>() {
     override fun getItemViewType(position: Int): Int {
-        return if (messageList[position].sender == FirebaseAuth.getInstance().uid) {
+        return if (messageList[position].sendersUid == FirebaseAuth.getInstance().uid) {
             0
         } else 1
     }

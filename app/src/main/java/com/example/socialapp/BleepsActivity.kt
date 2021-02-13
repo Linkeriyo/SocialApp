@@ -76,8 +76,7 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
                 AppData.bleepList.clear()
                 val bleeps = ArrayList<Bleep>()
                 snapshot.children.forEach(Consumer { child: DataSnapshot ->
-                    val bleep = child.value as Bleep
-                    bleeps.add(bleep)
+                    child.getValue(Bleep::class.java)?.let { bleeps.add(it) }
                 })
                 AppData.bleepList.addAll(bleeps)
                 updateRecyclerView()

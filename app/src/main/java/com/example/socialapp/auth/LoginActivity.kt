@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -46,71 +47,68 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setup() {
-        val registerButton = binding.registerButton
-        val loginButton = binding.loginButton
-        val googleLoginButton = binding.googleLoginButton
         emailTextView = binding.emailTextView
         passwordTextView = binding.emailTextView
+    }
 
-        registerButton.setOnClickListener {
-            if (emailTextView.text.toString().isNotEmpty()
-                    && passwordTextView.text.toString().isNotEmpty()) {
-                auth.createUserWithEmailAndPassword(
-                        emailTextView.text.toString(),
-                        passwordTextView.text.toString()
-                ).addOnCompleteListener { task: Task<AuthResult?> ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                                this,
-                                "Se ha registrado satisfactoriamente.",
-                                Toast.LENGTH_SHORT
-                        ).show()
-                        readyForNextActivity()
-                    } else {
-                        Toast.makeText(
-                                this,
-                                "Error al registrarse.",
-                                Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            } else {
-                Toast.makeText(
-                        this,
-                        "Los campos no deben estar vacíos.",
-                        Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
+    fun googleButtonPress(view: View) {
+        gSignInClient = GoogleSignIn.getClient(this, gSignInOptions)
+        startActivityForResult(gSignInClient.signInIntent, RC_SIGN_IN)
+    }
 
-        loginButton.setOnClickListener {
-            if (emailTextView.text.toString().isNotEmpty()
-                    && passwordTextView.text.toString().isNotEmpty()) {
-                auth.signInWithEmailAndPassword(
-                        emailTextView.text.toString(),
-                        passwordTextView.text.toString()
-                ).addOnCompleteListener { task: Task<AuthResult?> ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                                this,
-                                "Se ha iniciado sesión satisfactoriamente.",
-                                Toast.LENGTH_SHORT
-                        ).show()
-                        readyForNextActivity()
-                    } else {
-                        Toast.makeText(
-                                this,
-                                "Error al iniciar sesión.",
-                                Toast.LENGTH_SHORT
-                        ).show()
-                    }
+    fun loginButtonPress(view: View) {
+        if (emailTextView.text.toString().isNotEmpty()
+                && passwordTextView.text.toString().isNotEmpty()) {
+            auth.signInWithEmailAndPassword(
+                    emailTextView.text.toString(),
+                    passwordTextView.text.toString()
+            ).addOnCompleteListener { task: Task<AuthResult?> ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                            this,
+                            "Se ha iniciado sesión satisfactoriamente.",
+                            Toast.LENGTH_SHORT
+                    ).show()
+                    readyForNextActivity()
+                } else {
+                    Toast.makeText(
+                            this,
+                            "Error al iniciar sesión.",
+                            Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
+    }
 
-        googleLoginButton.setOnClickListener {
-            gSignInClient = GoogleSignIn.getClient(this, gSignInOptions)
-            startActivityForResult(gSignInClient.signInIntent, RC_SIGN_IN)
+    fun registerButtonPress(view: View) {
+        if (emailTextView.text.toString().isNotEmpty()
+                && passwordTextView.text.toString().isNotEmpty()) {
+            auth.createUserWithEmailAndPassword(
+                    emailTextView.text.toString(),
+                    passwordTextView.text.toString()
+            ).addOnCompleteListener { task: Task<AuthResult?> ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                            this,
+                            "Se ha registrado satisfactoriamente.",
+                            Toast.LENGTH_SHORT
+                    ).show()
+                    readyForNextActivity()
+                } else {
+                    Toast.makeText(
+                            this,
+                            "Error al registrarse.",
+                            Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        } else {
+            Toast.makeText(
+                    this,
+                    "Los campos no deben estar vacíos.",
+                    Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

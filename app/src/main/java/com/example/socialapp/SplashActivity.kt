@@ -29,7 +29,9 @@ class SplashActivity : AppCompatActivity() {
         usersReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val users = mutableListOf<User>()
-                snapshot.children.forEach(Consumer { child: DataSnapshot -> users.add(child.value as User) })
+                snapshot.children.forEach(Consumer {
+                    child: DataSnapshot -> child.getValue(User::class.java)?.let { users.add(it) }
+                })
                 AppData.userList = users
                 Thread(NextActivityWaiter(this)).start()
             }
@@ -70,7 +72,9 @@ class SplashActivity : AppCompatActivity() {
         bleepsReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val bleeps = mutableListOf<Bleep>()
-                snapshot.children.forEach(Consumer { child: DataSnapshot -> bleeps.add(child.value as Bleep) })
+                snapshot.children.forEach(Consumer {
+                    child: DataSnapshot -> child.getValue(Bleep::class.java)?.let { bleeps.add(it) }
+                })
                 AppData.bleepList = bleeps
                 bleepsLoaded = true
                 bleepsReference.removeEventListener(this)
