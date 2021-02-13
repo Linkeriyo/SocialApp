@@ -16,7 +16,6 @@ import com.example.socialapp.messaging.ContactsActivity
 import com.example.socialapp.models.Bleep
 import com.example.socialapp.readapters.BleepsAdapter
 import com.example.socialapp.readapters.BleepsAdapter.OnBleepClickListener
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -75,9 +74,9 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
         bleepsReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 AppData.bleepList.clear()
-                val bleeps = ArrayList<Bleep?>()
+                val bleeps = ArrayList<Bleep>()
                 snapshot.children.forEach(Consumer { child: DataSnapshot ->
-                    val bleep = child.getValue(Bleep::class.java)
+                    val bleep = child.value as Bleep
                     bleeps.add(bleep)
                 })
                 AppData.bleepList.addAll(bleeps)

@@ -1,15 +1,11 @@
 package com.example.socialapp
 
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.example.socialapp.data.AppData
 import com.example.socialapp.databinding.ActivityBleepDetailsBinding
 import com.example.socialapp.models.Bleep
-import com.mikhaellopez.circularimageview.CircularImageView
 
 class BleepDetailsActivity : AppCompatActivity() {
     private lateinit var bleep: Bleep

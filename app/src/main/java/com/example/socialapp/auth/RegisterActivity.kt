@@ -1,21 +1,15 @@
 package com.example.socialapp.auth
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.socialapp.BleepsActivity
-import com.example.socialapp.R
 import com.example.socialapp.auth.LoginActivity.Companion.isUserRegistered
 import com.example.socialapp.databinding.ActivityRegisterBinding
 import com.example.socialapp.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.mikhaellopez.circularimageview.CircularImageView
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -32,8 +26,7 @@ class RegisterActivity : AppCompatActivity() {
         setup()
     }
 
-    @SuppressLint("CheckResult")
-    fun setup() {
+    private fun setup() {
         val registerEmailTextView = binding.registerEmailTextView
         val registerNameTextView = binding.registerNameTextView
         val registerNickTextView = binding.registerNickTextView

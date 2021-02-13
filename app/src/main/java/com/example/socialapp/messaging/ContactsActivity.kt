@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.socialapp.R
 import com.example.socialapp.data.AppData
 import com.example.socialapp.databinding.ActivityContactsBinding
 import com.example.socialapp.messaging.ChatActivity
@@ -20,7 +18,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.util.*
 import java.util.function.Consumer
 
 class ContactsActivity : AppCompatActivity(), OnChatClickListener {
@@ -39,9 +36,9 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
         val usersReference = FirebaseDatabase.getInstance().getReference("users")
         usersReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                AppData.userList.
-                val users = ArrayList<User?>()
-                snapshot.children.forEach(Consumer { child: DataSnapshot -> users.add(child.getValue(User::class.java)) })
+                AppData.userList.clear()
+                val users = mutableListOf<User>()
+                snapshot.children.forEach(Consumer { child: DataSnapshot -> users.add(child.value as User) })
                 AppData.userList.addAll(users)
                 updateRecyclerView()
             }
@@ -53,17 +50,17 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
     }
 
     private fun setup() {
-        recyclerView = findViewById(R.id.contactRecyclerView)
+        recyclerView = binding.contactRecyclerView
         recyclerView.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
         val mAdapter = ContactsAdapter(AppData.userList, this, this)
         recyclerView.adapter = mAdapter
         if (AppData.userList.isNotEmpty()) {
-            findViewById<View>(R.id.noContactsTextView).visibility = View.INVISIBLE
+            binding.noContactsTextView.visibility = View.INVISIBLE
         }
-        val toolbar = findViewById<Toolbar>(R.id.toolbar_contacts)
-        toolbar.setNavigationOnClickListener { v: View? -> finish() }
+        val toolbar = binding.toolbarContacts
+        toolbar.setNavigationOnClickListener { finish() }
     }
 
     override fun onChatClick(position: Int) {
@@ -88,9 +85,9 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
         recyclerView.adapter!!.notifyDataSetChanged()
         recyclerView.invalidate()
         if (AppData.userList.isNotEmpty()) {
-            findViewById<View>(R.id.noContactsTextView).visibility = View.INVISIBLE
+            binding.noContactsTextView.visibility = View.INVISIBLE
         } else {
-            findViewById<View>(R.id.noContactsTextView).visibility = View.VISIBLE
+            binding.noContactsTextView.visibility = View.VISIBLE
         }
     }
 
