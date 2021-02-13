@@ -3,7 +3,7 @@ package com.example.socialapp.models
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Bleep(var user: User?, var timeMillis: Long?, var content: String?) {
+class Bleep(var user: User, var timeMillis: Long, var content: String) {
 
     companion object {
         fun timeStringFromMillis(timeMillis: Long): String {

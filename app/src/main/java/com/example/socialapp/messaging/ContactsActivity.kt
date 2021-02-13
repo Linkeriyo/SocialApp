@@ -39,7 +39,7 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
         val usersReference = FirebaseDatabase.getInstance().getReference("users")
         usersReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                AppData.userList.clear()
+                AppData.userList.
                 val users = ArrayList<User?>()
                 snapshot.children.forEach(Consumer { child: DataSnapshot -> users.add(child.getValue(User::class.java)) })
                 AppData.userList.addAll(users)

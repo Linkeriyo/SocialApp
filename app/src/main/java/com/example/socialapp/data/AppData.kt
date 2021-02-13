@@ -4,7 +4,7 @@ import com.example.socialapp.models.Bleep
 import com.example.socialapp.models.User
 
 object AppData {
-    var userList: List<User>? = null
-    var chatKeyList: List<String>? = null
-    var bleepList: List<Bleep>? = null
+    lateinit var userList: MutableList<User>
+    lateinit var chatKeyList: MutableList<String>
+    lateinit var bleepList: MutableList<Bleep>
 }

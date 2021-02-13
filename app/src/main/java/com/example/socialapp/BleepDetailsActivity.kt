@@ -14,6 +14,7 @@ import com.mikhaellopez.circularimageview.CircularImageView
 class BleepDetailsActivity : AppCompatActivity() {
     private lateinit var bleep: Bleep
     private lateinit var binding: ActivityBleepDetailsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBleepDetailsBinding.inflate(layoutInflater)

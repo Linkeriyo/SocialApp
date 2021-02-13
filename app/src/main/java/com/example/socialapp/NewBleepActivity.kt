@@ -46,7 +46,7 @@ class NewBleepActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener { finish() }
         val bleepContentView = binding.editTextBleepContent
         bleepContentView.setOnEditorActionListener { _: TextView?, _: Int, _: KeyEvent? ->
-            toolbar.findViewById<View>(R.id.send_bleep_option).isEnabled = !bleepContentView.text.toString().isEmpty()
+            toolbar.findViewById<View>(R.id.send_bleep_option).isEnabled = bleepContentView.text.toString().isNotEmpty()
             false
         }
     }
@@ -72,7 +72,7 @@ class NewBleepActivity : AppCompatActivity() {
         }
         if (bleepOkay) {
             val auth = FirebaseAuth.getInstance()
-            val user = currentUserFromList
+            val user = currentUserFromList!!
             val bleep = Bleep(user, System.currentTimeMillis(), bleepContentView.text.toString())
             val bleepsReference = FirebaseDatabase.getInstance().getReference("bleeps")
             bleepsReference.child((Long.MAX_VALUE - System.currentTimeMillis()).toString() + "-" + auth.uid).setValue(bleep)

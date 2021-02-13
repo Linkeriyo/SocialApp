@@ -29,8 +29,8 @@ class SplashActivity : AppCompatActivity() {
         val usersReference = FirebaseDatabase.getInstance().getReference("users")
         usersReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val users = ArrayList<User?>()
-                snapshot.children.forEach(Consumer { child: DataSnapshot -> users.add(child.getValue(User::class.java)) })
+                val users = mutableListOf<User>()
+                snapshot.children.forEach(Consumer { child: DataSnapshot -> users.add(child.value as User) })
                 AppData.userList = users
                 Thread(NextActivityWaiter(this)).start()
             }
@@ -57,8 +57,8 @@ class SplashActivity : AppCompatActivity() {
         val chatsReference = FirebaseDatabase.getInstance().getReference("chats")
         chatsReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val chatKeys = ArrayList<String?>()
-                snapshot.children.forEach(Consumer { child: DataSnapshot -> chatKeys.add(child.key) })
+                val chatKeys = mutableListOf<String>()
+                snapshot.children.forEach(Consumer { child: DataSnapshot -> chatKeys.add(child.key!!) })
                 AppData.chatKeyList = chatKeys
                 chatsReference.removeEventListener(this)
             }
@@ -70,8 +70,8 @@ class SplashActivity : AppCompatActivity() {
         val bleepsReference = FirebaseDatabase.getInstance().getReference("bleeps")
         bleepsReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val bleeps = ArrayList<Bleep?>()
-                snapshot.children.forEach(Consumer { child: DataSnapshot -> bleeps.add(child.getValue(Bleep::class.java)) })
+                val bleeps = mutableListOf<Bleep>()
+                snapshot.children.forEach(Consumer { child: DataSnapshot -> bleeps.add(child.value as Bleep) })
                 AppData.bleepList = bleeps
                 bleepsLoaded = true
                 bleepsReference.removeEventListener(this)
