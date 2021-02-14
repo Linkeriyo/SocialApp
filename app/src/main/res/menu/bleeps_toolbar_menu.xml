@@ -7,6 +7,9 @@
         android:title="Mensajes directos"
         app:showAsAction="always" />
     <item
+        android:id="@+id/edit_profile_option"
+        android:title="Editar perfil" />
+    <item
         android:id="@+id/sign_out_option"
         android:title="Cerrar sesión" />
 </menu>

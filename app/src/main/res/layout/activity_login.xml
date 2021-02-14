@@ -18,7 +18,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
+        app:layout_constraintTop_toBottomOf="@+id/login_password_text_view"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/registerButton" />
 
     <EditText
-        android:id="@+id/emailTextView"
+        android:id="@+id/login_email_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="244dp"
@@ -59,14 +59,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/passwordTextView"
+        android:id="@+id/login_password_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Contraseña"
         android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/emailTextView"
-        app:layout_constraintTop_toBottomOf="@+id/emailTextView" />
+        app:layout_constraintStart_toStartOf="@+id/login_email_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/login_email_text_view" />
 
     <TextView
         android:id="@+id/appNameView"

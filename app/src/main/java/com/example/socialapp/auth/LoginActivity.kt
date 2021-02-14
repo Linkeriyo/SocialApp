@@ -33,7 +33,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
             readyForNextActivity()
@@ -42,13 +41,14 @@ class LoginActivity : AppCompatActivity() {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setup()
     }
 
     private fun setup() {
-        emailTextView = binding.emailTextView
-        passwordTextView = binding.emailTextView
+        emailTextView = binding.loginEmailTextView
+        passwordTextView = binding.loginPasswordTextView
     }
 
     fun googleButtonPress(view: View) {
@@ -57,13 +57,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun loginButtonPress(view: View) {
-        if (emailTextView.text.toString().isNotEmpty()
-                && passwordTextView.text.toString().isNotEmpty()) {
+        if (binding.loginEmailTextView.text.isNotEmpty()
+                && binding.loginPasswordTextView.text.isNotEmpty()) {
             auth.signInWithEmailAndPassword(
                     emailTextView.text.toString(),
                     passwordTextView.text.toString()
-            ).addOnCompleteListener { task: Task<AuthResult?> ->
-                if (task.isSuccessful) {
+            ).addOnCompleteListener {
+                if (it.isSuccessful) {
                     Toast.makeText(
                             this,
                             "Se ha iniciado sesión satisfactoriamente.",
@@ -78,17 +78,23 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                 }
             }
+        } else {
+            Toast.makeText(
+                    this,
+                    "Los campos no deben estar vacíos.",
+                    Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     fun registerButtonPress(view: View) {
-        if (emailTextView.text.toString().isNotEmpty()
-                && passwordTextView.text.toString().isNotEmpty()) {
+        if (emailTextView.text.isNotBlank()
+                && passwordTextView.text.isNotBlank()) {
             auth.createUserWithEmailAndPassword(
                     emailTextView.text.toString(),
                     passwordTextView.text.toString()
-            ).addOnCompleteListener { task: Task<AuthResult?> ->
-                if (task.isSuccessful) {
+            ).addOnCompleteListener {
+                if (it.isSuccessful) {
                     Toast.makeText(
                             this,
                             "Se ha registrado satisfactoriamente.",
@@ -142,11 +148,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener { task: Task<AuthResult?> ->
-            if (task.isSuccessful) {
+        auth.signInWithCredential(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
                 Log.d(TAG, "signInWithCredential:success")
             } else {
-                Log.w(TAG, "signInWithCredential:failure", task.exception)
+                Log.w(TAG, "signInWithCredential:failure", it.exception)
             }
         }
     }

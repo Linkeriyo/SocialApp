@@ -7,7 +7,6 @@ class User {
     var image: String? = null
 
     constructor() {
-
     }
 
     constructor(userId: String, name: String, nick: String, image: String) {

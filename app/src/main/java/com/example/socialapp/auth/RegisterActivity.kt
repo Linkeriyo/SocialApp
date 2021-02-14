@@ -120,11 +120,11 @@ class RegisterActivity : AppCompatActivity() {
                 .centerCrop()
                 .into(binding.registerImageView)
 
-        binding.progressBar.visibility = View.GONE
+        binding.registerProgressBar.visibility = View.GONE
     }
 
     private fun progressBar() {
-        val progressBar = binding.progressBar;
+        val progressBar = binding.registerProgressBar
         progressBar.progress = 200
         progressBar.visibility = View.VISIBLE
         progressBar.max = 1000

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SocialApp">
         <activity
+            android:name=".auth.EditProfileActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+        <activity
             android:name=".BleepDetailsActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity

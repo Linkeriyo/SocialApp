@@ -3,4 +3,9 @@
     <string name="sign_in">Iniciar sesión</string>
     <string name="register">Registrarse</string>
     <string name="google_sign_in">Google sign in</string>
+    <string name="confirm_changes">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="nick">Nick</string>
+    <string name="name">Nombre</string>
+    <string name="email">Email</string>
 </resources>

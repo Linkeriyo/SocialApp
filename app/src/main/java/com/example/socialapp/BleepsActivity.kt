@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.socialapp.auth.EditProfileActivity
 import com.example.socialapp.auth.LoginActivity
 import com.example.socialapp.data.AppData
 import com.example.socialapp.databinding.ActivityBleepsBinding
@@ -35,13 +36,19 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.dm_option) {
-            directMessageOptionPress()
-            return true
-        } else if (item.itemId == R.id.sign_out_option) {
-            FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+        when (item.itemId) {
+            R.id.dm_option -> {
+                directMessageOptionPress()
+                return true
+            }
+            R.id.sign_out_option -> {
+                FirebaseAuth.getInstance().signOut()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+            R.id.edit_profile_option -> {
+                startActivity(Intent(this, EditProfileActivity::class.java))
+            }
         }
         return super.onOptionsItemSelected(item)
     }

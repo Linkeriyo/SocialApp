@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.socialapp.R
+import com.example.socialapp.data.AppData
 import com.example.socialapp.models.Bleep
 import com.example.socialapp.readapters.BleepsAdapter.BleepViewHolder
 import com.mikhaellopez.circularimageview.CircularImageView
@@ -22,8 +23,9 @@ class BleepsAdapter(private val bleepList: List<Bleep>, private val context: Con
 
     override fun onBindViewHolder(holder: BleepViewHolder, position: Int) {
         val bleep = bleepList[position]
-        Glide.with(context).load(bleep.user?.image).into(holder.bleepPicView)
-        holder.bleepNickView.text = bleep.user?.nick
+        val user = bleep.user!!.userId?.let { AppData.getUser(it) }
+        Glide.with(context).load(user?.image).into(holder.bleepPicView)
+        holder.bleepNickView.text = user?.nick
         holder.bleepTimeView.text = Bleep.timeStringFromMillis(bleep.timeMillis)
         holder.bleepContentView.text = bleep.content
     }
