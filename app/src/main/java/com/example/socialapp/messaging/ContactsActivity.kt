@@ -9,15 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.socialapp.data.AppData
 import com.example.socialapp.databinding.ActivityContactsBinding
-import com.example.socialapp.messaging.ChatActivity
 import com.example.socialapp.models.User
 import com.example.socialapp.readapters.ContactsAdapter
 import com.example.socialapp.readapters.ContactsAdapter.OnChatClickListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import java.util.function.Consumer
 
 class ContactsActivity : AppCompatActivity(), OnChatClickListener {
@@ -62,15 +59,15 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
 
     override fun onChatClick(position: Int) {
         val otherUser = AppData.userList[position]
-        Log.d(TAG, otherUser.userId!!)
+        Log.d(TAG, otherUser.uid)
         var chatKey: String? = null
         for (key in AppData.chatKeyList) {
-            if (key.contains(otherUser.userId!!) && key.contains(FirebaseAuth.getInstance().uid!!)) {
+            if (key.contains(otherUser.uid) && key.contains(FirebaseAuth.getInstance().uid!!)) {
                 chatKey = key
             }
         }
         if (chatKey == null) {
-            chatKey = FirebaseAuth.getInstance().uid + "-" + otherUser.userId
+            chatKey = FirebaseAuth.getInstance().uid + "-" + otherUser.uid
         }
         startActivity(Intent(this, ChatActivity::class.java)
                 .putExtra("chatKey", chatKey)
@@ -84,7 +81,7 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
         val userListWoCurrentUser = AppData.userList.toMutableList()
 
         userListWoCurrentUser.forEach {
-            if (FirebaseAuth.getInstance().uid.equals(it.userId)) {
+            if (FirebaseAuth.getInstance().uid.equals(it.uid)) {
                 userListWoCurrentUser.remove(it)
             }
         }

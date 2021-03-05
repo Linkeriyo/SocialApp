@@ -10,7 +10,7 @@ object AppData {
 
     fun getUserById(uid: String): User? {
         userList.forEach {
-            if (uid == it.userId) {
+            if (uid == it.uid) {
                 return it
             }
         }

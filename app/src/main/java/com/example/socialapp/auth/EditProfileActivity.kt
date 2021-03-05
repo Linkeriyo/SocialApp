@@ -2,12 +2,15 @@ package com.example.socialapp.auth
 
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.example.socialapp.R
 import com.example.socialapp.data.AppData
 import com.example.socialapp.data.DataChecking
 import com.example.socialapp.databinding.ActivityEditProfileBinding

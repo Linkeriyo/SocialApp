@@ -5,15 +5,15 @@ import java.util.*
 
 class Bleep {
 
-    var user: User? = null
+    var uid = ""
     var timeMillis: Long = 0
-    var content: String? = null
+    var content = ""
 
     constructor() {
     }
 
-    constructor(user: User, timeMillis: Long, content: String) {
-        this.user = user
+    constructor(uid: String, timeMillis: Long, content: String) {
+        this.uid = uid
         this.timeMillis = timeMillis
         this.content = content
     }

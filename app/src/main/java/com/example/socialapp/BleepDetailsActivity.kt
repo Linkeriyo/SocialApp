@@ -1,5 +1,6 @@
 package com.example.socialapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.socialapp.data.AppData
 import com.example.socialapp.databinding.ActivityBleepDetailsBinding
 import com.example.socialapp.models.Bleep
+import com.example.socialapp.models.User
 import com.example.socialapp.readapters.BleepsAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
@@ -17,10 +19,12 @@ class BleepDetailsActivity : AppCompatActivity(), BleepsAdapter.OnBleepClickList
     private lateinit var bleep: Bleep
     private lateinit var binding: ActivityBleepDetailsBinding
     private var commentsList = mutableListOf<Bleep>()
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bleep = AppData.bleepList[intent.getIntExtra("bleepPos", -1)]
+        user = AppData.getUserById(bleep.uid)!!
         binding = ActivityBleepDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setup()
@@ -31,8 +35,8 @@ class BleepDetailsActivity : AppCompatActivity(), BleepsAdapter.OnBleepClickList
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = BleepsAdapter(commentsList, this, this)
-        Glide.with(this).load(bleep.user?.image).into(binding.bleepDetailsPic)
-        binding.bleepDetailsNick.text = bleep.user?.nick
+        Glide.with(this).load(user.image).into(binding.bleepDetailsPic)
+        binding.bleepDetailsNick.text = user.nick
         binding.bleepDetailsTime.text = Bleep.timeStringFromMillis(bleep.timeMillis)
         binding.bleepDetailsContent.text = bleep.content
         binding.bleepDetailsToolbar.setNavigationOnClickListener { finish() }
@@ -42,7 +46,7 @@ class BleepDetailsActivity : AppCompatActivity(), BleepsAdapter.OnBleepClickList
     }
 
     private fun loadComments() {
-        val bleepPath = (Long.MAX_VALUE - bleep.timeMillis).toString() + "-" + bleep.user?.userId
+        val bleepPath = (Long.MAX_VALUE - bleep.timeMillis).toString() + "-" + bleep.uid
         val commentsReference = FirebaseDatabase.getInstance()
                 .getReference("bleeps")
                 .child(bleepPath)
@@ -68,6 +72,7 @@ class BleepDetailsActivity : AppCompatActivity(), BleepsAdapter.OnBleepClickList
     }
 
     override fun onBleepClick(position: Int) {
-        TODO("Not yet implemented")
+        val commentPath = (Long.MAX_VALUE - bleep.timeMillis).toString() + "-" + bleep.uid
+        startActivity(Intent(this, BleepDetailsActivity::class.java).putExtra("commentPath", position))
     }
 }

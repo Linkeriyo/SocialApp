@@ -8,18 +8,19 @@ object DataChecking {
         if (user == null) {
             return false;
         }
-        return (user.image != null
-                && user.name != null
-                && user.nick != null
-                && user.userId != null)
+        return (user.image != ""
+                && user.name != ""
+                && user.nick != ""
+                && user.uid != "")
     }
 
     fun isBleepOk(bleep: Bleep?): Boolean {
         if (bleep == null) {
             return false
         }
-        return (bleep.content != null
-                && bleep.content!!.length < 240
-                && bleep.user != null)
+        val user = AppData.getUserById(bleep.uid)
+        return (bleep.content != ""
+                && bleep.content.length < 240
+                && user != null)
     }
 }

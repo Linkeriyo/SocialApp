@@ -19,7 +19,7 @@ class ContactsAdapter(
         private val chatClickListener: OnChatClickListener
         ) : RecyclerView.Adapter<ContactViewHolder>() {
     override fun getItemViewType(position: Int): Int {
-        return if (userList[position].userId == FirebaseAuth.getInstance().uid) {
+        return if (userList[position].uid == FirebaseAuth.getInstance().uid) {
             0
         } else {
             1
