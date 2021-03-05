@@ -27,26 +27,23 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityContactsBinding.inflate(layoutInflater)
+        setup()
         loadData()
         setContentView(binding.root)
-        setup()
     }
 
     private fun loadData() {
         val usersReference = FirebaseDatabase.getInstance().getReference("users")
-        usersReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+        usersReference.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
                 AppData.userList.clear()
                 val users = mutableListOf<User>()
-                snapshot.children.forEach(Consumer { child: DataSnapshot -> child.getValue(User::class.java)?.let { users.add(it) } })
+                task.result!!.children.forEach(Consumer { child: DataSnapshot -> child.getValue(User::class.java)?.let { users.add(it) } })
                 AppData.userList.addAll(users)
                 updateRecyclerView()
+                binding.contactsSwiperefresh.isRefreshing = false
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
+        }
     }
 
     private fun setup() {
@@ -57,7 +54,9 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
         val mAdapter = ContactsAdapter(AppData.userList, this, this)
         recyclerView.adapter = mAdapter
         val toolbar = binding.toolbarContacts
-        updateRecyclerView()
+        binding.contactsSwiperefresh.setOnRefreshListener {
+            loadData()
+        }
         toolbar.setNavigationOnClickListener { finish() }
     }
 

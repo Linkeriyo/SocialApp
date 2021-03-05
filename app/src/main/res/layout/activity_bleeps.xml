@@ -35,20 +35,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No hay Bleeps :("
-        app:layout_constraintBottom_toBottomOf="@+id/bleepsRecyclerView"
+        app:layout_constraintBottom_toBottomOf="@id/bleeps_swiperefresh"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bleeps_toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/divider3" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bleepsRecyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/bleeps_swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bleepsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <View
         android:id="@+id/divider3"

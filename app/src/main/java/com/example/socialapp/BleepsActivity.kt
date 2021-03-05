@@ -74,28 +74,28 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
         val newBleepButton = binding.newBleepButton
         newBleepButton.setOnClickListener { startActivity(Intent(this, NewBleepActivity::class.java)) }
         setSupportActionBar(binding.bleepsToolbar)
+        binding.bleepsSwiperefresh.setOnRefreshListener {
+            loadBleeps()
+        }
     }
 
     private fun loadBleeps() {
         val bleepsReference = FirebaseDatabase.getInstance().getReference("bleeps")
-        bleepsReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+        bleepsReference.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
                 AppData.bleepList.clear()
                 val bleeps = ArrayList<Bleep>()
-                snapshot.children.forEach(Consumer { child: DataSnapshot ->
+                task.result!!.children.forEach(Consumer { child: DataSnapshot ->
                     child.getValue(Bleep::class.java)?.let { bleeps.add(it) }
                 })
                 AppData.bleepList.addAll(bleeps)
                 updateRecyclerView()
+                binding.bleepsSwiperefresh.isRefreshing = false
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
+        }
     }
 
-    fun updateRecyclerView() {
+    private fun updateRecyclerView() {
         recyclerView.adapter!!.notifyDataSetChanged()
         recyclerView.invalidate()
         if (AppData.bleepList.isNotEmpty()) {

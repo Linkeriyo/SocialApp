@@ -6,61 +6,135 @@
     android:layout_height="match_parent"
     tools:context=".BleepDetailsActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/bleep_details_sweeprefresh"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/divider12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider8">
+        app:layout_constraintTop_toBottomOf="@+id/bleepDetailsToolbar">
+        android:id="@+id/bleeps_swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
 
-        <TextView
-            android:id="@+id/bleepDetailsTime"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" • time"
-            android:textSize="25sp"
-            app:layout_constraintStart_toEndOf="@+id/bleepDetailsNick"
-            app:layout_constraintTop_toTopOf="@+id/bleepDetailsNick" />
-
-        <TextView
-            android:id="@+id/bleepDetailsContent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="content"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/bleepDetailsNick"
-            app:layout_constraintTop_toBottomOf="@+id/bleepDetailsNick" />
-
-        <TextView
-            android:id="@+id/bleepDetailsNick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="nick"
-            android:textSize="25sp"
-            app:layout_constraintStart_toEndOf="@+id/bleepDetailsPic"
-            app:layout_constraintTop_toTopOf="@+id/bleepDetailsPic" />
-
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/bleepDetailsPic"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background"
-            app:civ_border_color="#000000"
-            app:civ_border_width="0dp"
-            app:civ_shadow="false"
-            app:civ_shadow_color="#3f51b5"
-            app:civ_shadow_radius="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@+id/divider8">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bleep_comments_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider11" />
+
+            <View
+                android:id="@+id/divider11"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/bleepDetailsTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" • time"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toEndOf="@+id/bleepDetailsNick"
+                    app:layout_constraintTop_toTopOf="@+id/bleepDetailsNick" />
+
+                <TextView
+                    android:id="@+id/bleepDetailsContent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="content"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/bleepDetailsNick"
+                    app:layout_constraintTop_toBottomOf="@+id/bleepDetailsNick" />
+
+                <TextView
+                    android:id="@+id/bleepDetailsNick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="nick"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toEndOf="@+id/bleepDetailsPic"
+                    app:layout_constraintTop_toTopOf="@+id/bleepDetailsPic" />
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/bleepDetailsPic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher_background"
+                    app:civ_border_color="#000000"
+                    app:civ_border_width="0dp"
+                    app:civ_shadow="false"
+                    app:civ_shadow_color="#3f51b5"
+                    app:civ_shadow_radius="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <EditText
+        android:id="@+id/bleep_comment_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Escribe tu mensaje"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/send_bleep_comment_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/divider12"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/bleep_comment_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/send_bleep_comment_button"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:backgroundTint="#FFFFFF"
+        android:gravity="center"
+        app:icon="@drawable/ic_baseline_send_24"
+        app:iconGravity="end"
+        app:iconTint="?attr/editTextColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bleep_comment_textview" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/bleepDetailsToolbar"
@@ -69,12 +143,10 @@
         android:background="?android:attr/colorBackground"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:title="Bleep" />
-
 
     <View
         android:id="@+id/divider8"
@@ -84,4 +156,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bleepDetailsToolbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
