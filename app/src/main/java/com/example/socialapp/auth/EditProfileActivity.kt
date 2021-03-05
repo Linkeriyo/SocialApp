@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.socialapp.data.AppData
+import com.example.socialapp.data.DataChecking
 import com.example.socialapp.databinding.ActivityEditProfileBinding
 import com.example.socialapp.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -32,7 +33,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun setup() {
         val firebaseUser = auth.currentUser
-        val databaseUser = firebaseUser?.let { AppData.getUser(it.uid) }
+        val databaseUser = firebaseUser?.let { AppData.getUserById(it.uid) }
         database.getReference("users/${auth.currentUser!!.uid}").get().addOnCompleteListener {
             if (it.isSuccessful) {
                 progressBar()
@@ -40,13 +41,16 @@ class EditProfileActivity : AppCompatActivity() {
                 putImage(image)
             }
         }
-        binding.editProfileEmailTextView.setText(firebaseUser?.email)
-        binding.editProfileNameTextView.setText(databaseUser?.name)
-        binding.editProfileNickTextView.setText(databaseUser?.nick)
+        binding.editProfileToolbar.subtitle = firebaseUser?.email
+        binding.editProfileNameTextview.setText(databaseUser?.name)
+        binding.editProfileNickTextview.setText(databaseUser?.nick)
+        binding.editProfileToolbar.setNavigationOnClickListener {
+            finish();
+        }
     }
 
     private fun progressBar() {
-        val progressBar = binding.editProgressBar
+        val progressBar = binding.editProfileProgressbar
         progressBar.progress = 200
         progressBar.visibility = View.VISIBLE
         progressBar.max = 1000
@@ -59,9 +63,9 @@ class EditProfileActivity : AppCompatActivity() {
         Glide.with(this)
                 .load(uri)
                 .centerCrop()
-                .into(binding.editProfileImageView)
+                .into(binding.editProfileImageview)
 
-        binding.editProgressBar.visibility = View.GONE
+        binding.editProfileProgressbar.visibility = View.GONE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -102,27 +106,25 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     fun confirmButtonPress(view: View) {
-        if (binding.editProfileEmailTextView.text.isNotEmpty()
-                && binding.editProfileNameTextView.text.isNotEmpty()
-                && binding.editProfileNickTextView.text.isNotEmpty()
+        if (binding.editProfileNameTextview.text.isNotEmpty()
+                && binding.editProfileNickTextview.text.isNotEmpty()
                 && image.isNotEmpty()) {
-            val user = auth.currentUser
+            val firebaseUser = auth.currentUser
             val usersReference = FirebaseDatabase.getInstance().getReference("users")
-            usersReference.child(user!!.uid).setValue(User(user.uid,
-                    binding.editProfileNameTextView.text.toString(),
-                    binding.editProfileNickTextView.text.toString(),
+            val user = User(firebaseUser!!.uid,
+                    binding.editProfileNameTextview.text.toString(),
+                    binding.editProfileNickTextview.text.toString(),
                     image
-            ))
-            finish()
+            )
+            if (DataChecking.isUserOk(user)) {
+                usersReference.child(firebaseUser.uid).setValue(user)
+                finish()
+            }
         } else {
             Toast.makeText(this,
                     "Todos los campos son obligatorios",
                     Toast.LENGTH_SHORT
             ).show()
         }
-    }
-
-    fun cancelPress(view: View) {
-        finish()
     }
 }

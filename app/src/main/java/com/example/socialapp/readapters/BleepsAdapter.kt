@@ -23,7 +23,7 @@ class BleepsAdapter(private val bleepList: List<Bleep>, private val context: Con
 
     override fun onBindViewHolder(holder: BleepViewHolder, position: Int) {
         val bleep = bleepList[position]
-        val user = bleep.user!!.userId?.let { AppData.getUser(it) }
+        val user = bleep.user!!.userId?.let { AppData.getUserById(it) }
         Glide.with(context).load(user?.image).into(holder.bleepPicView)
         holder.bleepNickView.text = user?.nick
         holder.bleepTimeView.text = Bleep.timeStringFromMillis(bleep.timeMillis)

@@ -56,10 +56,8 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
         recyclerView.layoutManager = layoutManager
         val mAdapter = ContactsAdapter(AppData.userList, this, this)
         recyclerView.adapter = mAdapter
-        if (AppData.userList.isNotEmpty()) {
-            binding.noContactsTextView.visibility = View.INVISIBLE
-        }
         val toolbar = binding.toolbarContacts
+        updateRecyclerView()
         toolbar.setNavigationOnClickListener { finish() }
     }
 
@@ -84,10 +82,18 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
     fun updateRecyclerView() {
         recyclerView.adapter!!.notifyDataSetChanged()
         recyclerView.invalidate()
-        if (AppData.userList.isNotEmpty()) {
-            binding.noContactsTextView.visibility = View.INVISIBLE
-        } else {
+        val userListWoCurrentUser = AppData.userList.toMutableList()
+
+        userListWoCurrentUser.forEach {
+            if (FirebaseAuth.getInstance().uid.equals(it.userId)) {
+                userListWoCurrentUser.remove(it)
+            }
+        }
+
+        if (userListWoCurrentUser.isEmpty()) {
             binding.noContactsTextView.visibility = View.VISIBLE
+        } else {
+            binding.noContactsTextView.visibility = View.INVISIBLE
         }
     }
 

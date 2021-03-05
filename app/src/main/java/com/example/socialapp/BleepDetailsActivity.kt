@@ -24,7 +24,7 @@ class BleepDetailsActivity : AppCompatActivity() {
         val bleepDetailsTime = binding.bleepDetailsTime
         val bleepDetailsContent = binding.bleepDetailsContent
         val bleepDetailsPic = binding.bleepDetailsPic
-        val user = bleep.user?.userId?.let { AppData.getUser(it) }
+        val user = bleep.user?.userId?.let { AppData.getUserById(it) }
         Glide.with(this).load(user?.image).into(bleepDetailsPic)
         bleepDetailsNick.text = user?.nick
         bleepDetailsTime.text = Bleep.timeStringFromMillis(bleep.timeMillis)

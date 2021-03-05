@@ -10,13 +10,12 @@
         android:id="@+id/registerEmailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:enabled="false"
         android:hint="Email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerImageView" />
 
@@ -48,7 +47,7 @@
         android:id="@+id/registerFinalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="32dp"
         android:onClick="registerButtonPress"
         android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,17 +58,17 @@
         android:id="@+id/registerImageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="32dp"
         android:clickable="true"
         android:onClick="editPicPress"
-        android:src="@drawable/ic_person"
+        android:src="@drawable/defaultimage"
         app:civ_border="false"
         app:civ_circle_color_direction="top_to_bottom"
         app:civ_circle_color_end="#22838383"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/divider10" />
 
     <ProgressBar
         android:id="@+id/registerProgressBar"
@@ -81,4 +80,23 @@
         app:layout_constraintEnd_toEndOf="@+id/registerImageView"
         app:layout_constraintStart_toStartOf="@+id/registerImageView"
         app:layout_constraintTop_toTopOf="@+id/registerImageView" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackground"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Registro" />
+
+    <View
+        android:id="@+id/divider10"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

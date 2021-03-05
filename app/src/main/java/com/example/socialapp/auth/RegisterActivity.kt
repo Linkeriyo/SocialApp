@@ -15,6 +15,7 @@ import com.example.socialapp.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.example.socialapp.data.DataChecking
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -27,7 +28,7 @@ class RegisterActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
     private val storage = FirebaseStorage.getInstance()
-    private lateinit var image : String
+    private lateinit var image: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +43,19 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setup() {
         val user = auth.currentUser
-        database.getReference("users/${auth.currentUser!!.uid}").get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                progressBar()
-                image = it.result!!.child("image").getValue(String::class.java)!!
-                putImage(image)
+        database.getReference("users/${auth.currentUser!!.uid}").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                if (task.result!!.child("image").getValue(String::class.java) != null) {
+                    progressBar()
+                    image = task.result!!.child("image").getValue(String::class.java)!!
+                    putImage(image)
+                } else {
+                    database.getReference("defaultuserimg").get().addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            image = it.result!!.getValue(String::class.java)!!
+                        }
+                    }
+                }
             }
         }
         binding.registerEmailTextView.setText(user?.email)
@@ -61,14 +70,23 @@ class RegisterActivity : AppCompatActivity() {
         if (!binding.registerEmailTextView.text.equals("")
                 && !binding.registerNameTextView.text.equals("")
                 && !binding.registerNickTextView.text.equals("")) {
-            val user = auth.currentUser
+            val firebaseUser = auth.currentUser
             val usersReference = database.getReference("users")
-            usersReference.child(user!!.uid).setValue(User(user.uid,
+            val user = User(firebaseUser!!.uid,
                     binding.registerNameTextView.text.toString(),
                     binding.registerNickTextView.text.toString(),
                     image
-            ))
-            nextActivity()
+            )
+            if (DataChecking.isUserOk(user)) {
+                usersReference.child(firebaseUser.uid).setValue(user)
+                nextActivity()
+            } else {
+                Toast.makeText(this,
+                        "Ha ocurrido un error",
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
+
         } else {
             Toast.makeText(this,
                     "Todos los campos son obligatorios",

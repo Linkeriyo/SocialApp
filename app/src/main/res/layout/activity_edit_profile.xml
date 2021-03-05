@@ -5,34 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".auth.EditProfileActivity">
-    <EditText
-        android:id="@+id/editProfileEmailTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:enabled="false"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editProfileImageView" />
 
     <EditText
-        android:id="@+id/editProfileNameTextView"
+        android:id="@+id/edit_profile_name_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:enabled="true"
         android:hint="@string/name"
         android:inputType="textPersonName|text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editProfileEmailTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile_imageview" />
 
     <EditText
-        android:id="@+id/editProfileNickTextView"
+        android:id="@+id/edit_profile_nick_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -41,59 +29,65 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editProfileNameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile_name_textview" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/editProfileImageView"
+        android:id="@+id/edit_profile_imageview"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="32dp"
         android:clickable="true"
+        android:focusable="true"
         android:onClick="editPicPress"
-        android:src="@drawable/ic_person"
+        android:src="@drawable/defaultimage"
         app:civ_border="false"
         app:civ_circle_color_direction="top_to_bottom"
         app:civ_circle_color_end="#22838383"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:focusable="true" />
+        app:layout_constraintTop_toBottomOf="@id/divider9" />
 
     <ProgressBar
-        android:id="@+id/editProgressBar"
+        android:id="@+id/edit_profile_progressbar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/editProfileImageView"
-        app:layout_constraintEnd_toEndOf="@+id/editProfileImageView"
-        app:layout_constraintStart_toStartOf="@+id/editProfileImageView"
-        app:layout_constraintTop_toTopOf="@+id/editProfileImageView" />
+        app:layout_constraintBottom_toBottomOf="@+id/edit_profile_imageview"
+        app:layout_constraintEnd_toEndOf="@+id/edit_profile_imageview"
+        app:layout_constraintStart_toStartOf="@+id/edit_profile_imageview"
+        app:layout_constraintTop_toTopOf="@+id/edit_profile_imageview" />
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/edit_profile_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackground"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:subtitle="UserEmail"
+        app:title="Editar perfil" />
+
+    <View
+        android:id="@+id/divider9"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile_toolbar" />
+
+    <Button
+        android:id="@+id/edit_profile_confirm_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editProfileNickTextView">
-
-        <Button
-            android:id="@+id/editProfileCancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="cancelPress"
-            android:text="@string/cancel" />
-
-        <Button
-            android:id="@+id/editProfileFinalButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:onClick="confirmButtonPress"
-            android:text="@string/confirm_changes" />
-    </LinearLayout>
+        android:layout_marginTop="24dp"
+        android:onClick="confirmButtonPress"
+        android:text="@string/confirm_changes"
+        app:layout_constraintEnd_toEndOf="@+id/edit_profile_nick_textview"
+        app:layout_constraintStart_toStartOf="@+id/edit_profile_nick_textview"
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile_nick_textview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

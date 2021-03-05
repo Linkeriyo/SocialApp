@@ -2,6 +2,7 @@ package com.example.socialapp.messaging
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,6 +65,11 @@ class ChatActivity : AppCompatActivity() {
                 messageList.addAll(messages)
                 recyclerView.adapter!!.notifyDataSetChanged()
                 recyclerView.invalidate()
+                if (messageList.isEmpty()) {
+                    binding.noMessagesTextview.visibility = View.VISIBLE
+                } else {
+                    binding.noMessagesTextview.visibility = View.INVISIBLE
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {

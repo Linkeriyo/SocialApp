@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.socialapp.data.AppData
+import com.example.socialapp.data.DataChecking
 import com.example.socialapp.databinding.ActivityNewBleepBinding
 import com.example.socialapp.models.Bleep
 import com.example.socialapp.models.User
@@ -74,7 +75,9 @@ class NewBleepActivity : AppCompatActivity() {
             val user = currentUserFromList!!
             val bleep = Bleep(user, System.currentTimeMillis(), bleepContentView.text.toString())
             val bleepsReference = FirebaseDatabase.getInstance().getReference("bleeps")
-            bleepsReference.child((Long.MAX_VALUE - System.currentTimeMillis()).toString() + "-" + auth.uid).setValue(bleep)
+            if (DataChecking.isBleepOk(bleep)) {
+                bleepsReference.child((Long.MAX_VALUE - System.currentTimeMillis()).toString() + "-" + auth.uid).setValue(bleep)
+            }
             finish()
         }
     }

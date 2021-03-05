@@ -8,7 +8,7 @@ object AppData {
     lateinit var chatKeyList: MutableList<String>
     lateinit var bleepList: MutableList<Bleep>
 
-    fun getUser(uid: String): User? {
+    fun getUserById(uid: String): User? {
         userList.forEach {
             if (uid == it.userId) {
                 return it
