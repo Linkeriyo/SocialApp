@@ -170,9 +170,9 @@ class LoginActivity : AppCompatActivity() {
         private const val TAG = "LoginActivity"
         val isUserRegistered: Boolean
             get() {
-                val userId = FirebaseAuth.getInstance().uid
+                val uid = FirebaseAuth.getInstance().uid!!
                 for (user in AppData.userList) {
-                    if (user.uid == userId) {
+                    if (user.uid == uid) {
                         return true
                     }
                 }

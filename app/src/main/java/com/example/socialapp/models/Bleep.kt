@@ -8,6 +8,7 @@ class Bleep {
     var uid = ""
     var timeMillis: Long = 0
     var content = ""
+    var comments = mutableListOf<Bleep>()
 
     constructor() {
     }

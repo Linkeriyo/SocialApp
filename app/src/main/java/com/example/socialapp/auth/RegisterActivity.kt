@@ -42,6 +42,11 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setup() {
+        database.getReference("defaultuserimg").get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                image = it.result!!.getValue(String::class.java)!!
+            }
+        }
         val user = auth.currentUser
         database.getReference("users/${auth.currentUser!!.uid}").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -49,12 +54,6 @@ class RegisterActivity : AppCompatActivity() {
                     progressBar()
                     image = task.result!!.child("image").getValue(String::class.java)!!
                     putImage(image)
-                } else {
-                    database.getReference("defaultuserimg").get().addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            image = it.result!!.getValue(String::class.java)!!
-                        }
-                    }
                 }
             }
         }

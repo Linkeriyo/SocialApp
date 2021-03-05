@@ -16,4 +16,13 @@ object AppData {
         }
         return null
     }
+
+    fun getBleep(uid: String, timeMillis: Long): Bleep? {
+        bleepList.forEach {
+            if (uid == it.uid && timeMillis == it.timeMillis) {
+                return it
+            }
+        }
+        return null
+    }
 }

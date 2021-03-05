@@ -27,6 +27,7 @@ import java.util.function.Consumer
 
 class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
 
+
     private lateinit var binding: ActivityBleepsBinding
     private lateinit var recyclerView: RecyclerView
 
@@ -72,7 +73,7 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
             binding.noBleepsTextView.visibility = View.INVISIBLE
         }
         val newBleepButton = binding.newBleepButton
-        newBleepButton.setOnClickListener { startActivity(Intent(this, NewBleepActivity::class.java)) }
+        newBleepButton.setOnClickListener { startActivityForResult(Intent(this, NewBleepActivity::class.java), NEW_BLEEP) }
         setSupportActionBar(binding.bleepsToolbar)
         binding.bleepsSwiperefresh.setOnRefreshListener {
             loadBleeps()
@@ -113,7 +114,15 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
         startActivity(Intent(this, BleepDetailsActivity::class.java).putExtra("bleepPos", position))
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == NEW_BLEEP) {
+            loadBleeps()
+        }
+    }
+
     companion object {
         private const val TAG = "BleepsActivity"
+        private const val NEW_BLEEP = 1
     }
 }
