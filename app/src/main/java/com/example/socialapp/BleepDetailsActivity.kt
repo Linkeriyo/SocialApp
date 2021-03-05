@@ -94,6 +94,7 @@ class BleepDetailsActivity : AppCompatActivity(), BleepsAdapter.OnBleepClickList
                     bleepsReference.child((Long.MAX_VALUE - bleep.timeMillis).toString() + "-" + bleep.uid).setValue(bleep)
                 }
                 bleepContentView.setText("")
+                loadComments()
             }
         }
     }
@@ -114,6 +115,11 @@ class BleepDetailsActivity : AppCompatActivity(), BleepsAdapter.OnBleepClickList
                 commentsList.addAll(comments)
                 updateRecyclerView()
                 binding.bleepDetailsSweeprefresh.isRefreshing = false
+                if (commentsList.isEmpty()) {
+                    binding.noCommentsTextview.visibility = View.VISIBLE
+                } else {
+                    binding.noCommentsTextview.visibility = View.INVISIBLE
+                }
             }
         }
     }

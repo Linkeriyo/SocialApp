@@ -2,6 +2,6 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
     <item android:drawable="@color/black" />
-    <item android:drawable="@drawable/ic_baseline_message_24_dark" android:gravity="center"/>
+    <item android:drawable="@drawable/ic_baseline_groups_24" android:gravity="center"/>
 
 </layer-list>

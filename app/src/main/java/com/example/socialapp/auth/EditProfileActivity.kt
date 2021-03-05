@@ -121,6 +121,7 @@ class EditProfileActivity : AppCompatActivity() {
             )
             if (DataChecking.isUserOk(user)) {
                 usersReference.child(firebaseUser.uid).setValue(user)
+                AppData.updateUserList()
                 finish()
             }
         } else {

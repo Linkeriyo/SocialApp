@@ -75,16 +75,11 @@ class ContactsActivity : AppCompatActivity(), OnChatClickListener {
         )
     }
 
-    fun updateRecyclerView() {
+    private fun updateRecyclerView() {
         recyclerView.adapter!!.notifyDataSetChanged()
         recyclerView.invalidate()
         val userListWoCurrentUser = AppData.userList.toMutableList()
-
-        userListWoCurrentUser.forEach {
-            if (FirebaseAuth.getInstance().uid.equals(it.uid)) {
-                userListWoCurrentUser.remove(it)
-            }
-        }
+        userListWoCurrentUser.remove(AppData.getUserById(FirebaseAuth.getInstance().uid!!))
 
         if (userListWoCurrentUser.isEmpty()) {
             binding.noContactsTextView.visibility = View.VISIBLE

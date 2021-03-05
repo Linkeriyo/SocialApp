@@ -48,7 +48,7 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
                 finish()
             }
             R.id.edit_profile_option -> {
-                startActivity(Intent(this, EditProfileActivity::class.java))
+                startActivityForResult(Intent(this, EditProfileActivity::class.java), PROFILE_EDITED)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -116,7 +116,7 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == NEW_BLEEP) {
+        if (requestCode == NEW_BLEEP || requestCode == PROFILE_EDITED) {
             loadBleeps()
         }
     }
@@ -124,5 +124,6 @@ class BleepsActivity : AppCompatActivity(), OnBleepClickListener {
     companion object {
         private const val TAG = "BleepsActivity"
         private const val NEW_BLEEP = 1
+        private const val PROFILE_EDITED = 2
     }
 }

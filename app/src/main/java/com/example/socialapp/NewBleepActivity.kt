@@ -71,12 +71,13 @@ class NewBleepActivity : AppCompatActivity() {
             bleepOkay = false
         }
         if (bleepOkay) {
+            val timeMillis = System.currentTimeMillis()
             val auth = FirebaseAuth.getInstance()
             val user = currentUserFromList!!
-            val bleep = Bleep(user.uid, System.currentTimeMillis(), bleepContentView.text.toString())
+            val bleep = Bleep(user.uid, timeMillis, bleepContentView.text.toString())
             val bleepsReference = FirebaseDatabase.getInstance().getReference("bleeps")
             if (DataChecking.isBleepOk(bleep)) {
-                bleepsReference.child((Long.MAX_VALUE - System.currentTimeMillis()).toString() + "-" + auth.uid).setValue(bleep)
+                bleepsReference.child((Long.MAX_VALUE - timeMillis).toString() + "-" + auth.uid).setValue(bleep)
             }
             finish()
         }
